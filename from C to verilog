@@ -1,0 +1,53 @@
+/*
+//===========================//
+// from C to Verilog //
+int main ()
+int a=5; int b =2; int x,y;
+x = a+b; y = x+3;
+//result x = 7, y= 10 return 0 ;
+//===========================//
+*/
+
+module add_fsm(
+	input go, CLK, reset,
+	input [5:0] a,b,
+	output reg [5:0] result  );
+	
+	reg [5:0] x,y;
+	
+	localparam
+					s0 = 2'd0,
+					s1 = 2'd1,
+					s2 = 2'd2,
+					s3 = 2'd3;
+	reg [1:0] present;
+	
+always @ ( posedge CLK)
+begin
+	if (reset)
+		present <= s0;
+	else	
+	begin
+		case(present)
+			s0:	begin
+				if(go)
+					present <= s1;
+					end
+			s1:	begin
+					present <= s2;
+					x <= a+b;
+					end
+			s2:	begin
+					present <= s3;
+					y <= x + 6'd3;
+					end
+			s3:	begin
+					present <=  s0;
+					result <= y	+	x;
+					end
+
+		endcase
+	end
+end
+			
+endmodule
